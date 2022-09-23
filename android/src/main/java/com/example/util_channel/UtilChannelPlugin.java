@@ -1,6 +1,35 @@
 package com.example.util_channel;
 
+
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
+import android.os.Build;
+
+import java.net.NetworkInterface;
+import java.util.Collections;
+import java.util.List;
+
+import android.security.keystore.KeyGenParameterSpec;
+import android.security.keystore.KeyPermanentlyInvalidatedException;
+import android.security.keystore.KeyProperties;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
+
+import java.io.IOException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.MethodCall;
@@ -11,12 +40,14 @@ import io.flutter.plugin.common.MethodChannel.Result;
 /**
  * UtilChannelPlugin
  */
+@TargetApi(Build.VERSION_CODES.M)
 public class UtilChannelPlugin implements FlutterPlugin, MethodCallHandler {
     /// The MethodChannel that will the communication between Flutter and native Android
     ///
     /// This local reference serves to register the plugin with the Flutter Engine and unregister it
     /// when the Flutter Engine is detached from the Activity
     private MethodChannel channel;
+    static private String KEY_NAME = "biometric_key";
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
@@ -45,6 +76,7 @@ public class UtilChannelPlugin implements FlutterPlugin, MethodCallHandler {
     }
 
     //Util biometric
+    @TargetApi(Build.VERSION_CODES.N)
     private boolean setInvalidateBiometrics() {
         generateSecretKey(new KeyGenParameterSpec.Builder(
                 KEY_NAME,
