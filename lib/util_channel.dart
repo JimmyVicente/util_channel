@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'package:flutter/services.dart';
+
 
 class UtilChannel{
   static const MethodChannel _channel = MethodChannel('util_channel');
@@ -13,7 +15,7 @@ class UtilChannel{
   }
 
 
-  static Future<String> macAddress() async {
+  static Future<String> get macAddress async {
     final String macID = await _channel.invokeMethod('getMacAddress');
     return macID;
   }
